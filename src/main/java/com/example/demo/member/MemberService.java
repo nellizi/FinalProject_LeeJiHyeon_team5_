@@ -3,8 +3,11 @@ package com.example.demo.member;
 import com.example.demo.auth.PrincipalDetails;
 import com.example.demo.member.model.Member;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -56,5 +59,14 @@ public class MemberService {
         Member member = memberRepository.findByEmail(email);
         String username = member.getUsername();
         return username;
+    }
+
+    public void setTemporaryPassword(String username, String password) {
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("일치하는 회원을 찾을 수 없습니다."));
+
+        String encPassword = bCryptPasswordEncoder.encode(password);
+        member.setPassword(encPassword);
+        memberRepository.save(member);
     }
 }

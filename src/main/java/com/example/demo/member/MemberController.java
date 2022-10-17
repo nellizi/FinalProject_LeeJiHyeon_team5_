@@ -79,4 +79,23 @@ public class MemberController {
         return "member/alert";
     }
 
+
+    @GetMapping("/findPassword")
+    public String findPassword(){
+        return "member/findPassword";
+    }
+
+    @PostMapping("/findPassword")
+    public String foundPassword(@RequestParam String username,@RequestParam String email, Model model){
+        String password = "1234a";
+        memberService.setTemporaryPassword(username,password);
+        model.addAttribute("msg",
+                "회원님의 임시 비밀번호는 " + password + "입니다. 로그인 후 비밀번호를 변경해주세요");
+
+        return "member/alert";
+    }
+
+
+
+
 }
