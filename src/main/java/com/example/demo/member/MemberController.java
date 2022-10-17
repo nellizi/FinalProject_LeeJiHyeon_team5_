@@ -1,6 +1,8 @@
 package com.example.demo.member;
 
+import com.example.demo.auth.PrincipalDetails;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,10 +40,16 @@ public class MemberController {
         return rawPassword;
     }
 
-    @GetMapping("/info")
-    @ResponseBody
-    public String info(){
-        return "개인정보";
+    @GetMapping("/modify")
+    public String modify(@AuthenticationPrincipal PrincipalDetails principalDetails){
+         return "member/modify";
+    }
+
+    @PostMapping("/modify")
+    public String modifyPost(@AuthenticationPrincipal PrincipalDetails principalDetails, ModifyForm modifyForm){
+        memberService.modify(principalDetails,modifyForm);
+        System.out.println(principalDetails);
+        return  "redirect:/";
     }
 
 }

@@ -9,7 +9,11 @@ import java.util.Collection;
 
 public class PrincipalDetails implements UserDetails {
 
-    private Member member;
+    private final Member member;
+
+    public Member getMember() {
+        return member;
+    }
 
     public PrincipalDetails(Member member){
         this.member = member;
@@ -56,4 +60,6 @@ public class PrincipalDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }
