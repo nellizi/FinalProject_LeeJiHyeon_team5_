@@ -4,6 +4,7 @@ import com.example.demo.auth.PrincipalDetails;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -50,6 +51,32 @@ public class MemberController {
         memberService.modify(principalDetails,modifyForm);
         System.out.println(principalDetails);
         return  "redirect:/";
+    }
+    @GetMapping("modifyPassword")
+    public String modifyPassword(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model){
+        String password = principalDetails.getPassword();
+        model.addAttribute("password",password);
+        System.out.println(password);
+        return "member/modifyPassword";
+    }
+
+    @PostMapping("modifyPassword")
+    public String modifyPasswordPost(@AuthenticationPrincipal PrincipalDetails principalDetails,@RequestParam String new_password){
+        memberService.modifyPassword(principalDetails,new_password);
+        return  "redirect:/";
+    }
+
+    @GetMapping("/findUsername")
+    public String findUserName(){
+        return "member/findUsername";
+    }
+
+    @PostMapping("/findUsername")
+    public String foundUsername(@RequestParam String email, Model model){
+        String username = memberService.findUsernameByEmail(email);
+        model.addAttribute("msg", "회원님의 아이디는 " + username + "입니다.");
+
+        return "member/alert";
     }
 
 }

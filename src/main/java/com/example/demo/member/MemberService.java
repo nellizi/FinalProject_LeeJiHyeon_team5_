@@ -41,4 +41,20 @@ public class MemberService {
         memberRepository.save(member);
 
     }
+    public void modifyPassword(PrincipalDetails principalDetails, String new_password) {
+        Member member = principalDetails.getMember();
+
+        String encPassword = bCryptPasswordEncoder.encode(new_password);
+        member.setPassword(encPassword);
+
+        memberRepository.save(member);
+
+
+    }
+
+    public String findUsernameByEmail(String email) {
+        Member member = memberRepository.findByEmail(email);
+        String username = member.getUsername();
+        return username;
+    }
 }
